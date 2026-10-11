@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Bailleur – LookForHome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A1931',
+            secondary: '#1A3D63',
+            accent: '#4A7FA7',
+            light: '#B3CFE5',
+            bg: '#F6FAFD',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+
+  </head>
+<body class="bg-bg min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html"><img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-10"></a>
+      <div class="flex items-center gap-4">
+        <span class="hidden sm:inline text-sm text-secondary">Bonjour, <strong class="text-primary">Jean</strong></span>
+        <button onclick="logout()" class="text-sm font-medium text-accent hover:underline">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Tabs -->
+    <div class="flex flex-wrap gap-2 mb-8 border-b border-light pb-4">
+      <button data-tab="submit" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium bg-accent text-white">Soumettre un logement</button>
+      <button data-tab="mysubs" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium text-secondary hover:bg-light/50">Mes soumissions</button>
+      <button data-tab="profile" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium text-secondary hover:bg-light/50">Mon profil</button>
+    </div>
+
+    <!-- ========== TAB: SOUMETTRE ========== -->
+    <div id="tab-submit" class="tab-content">
+      <div class="bg-white rounded-2xl shadow-sm border border-light/50 p-6 md:p-8 max-w-2xl">
+        <h2 class="text-xl font-bold text-primary mb-6">Soumettre un nouveau logement</h2>
+        <form id="listingForm" class="space-y-5">
+          <!-- Type -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Type de logement *</label>
+            <select id="housingType" required class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none bg-white">
+              <option value="">Sélectionner le type</option>
+              <option value="chambre_moderne">Chambre moderne</option>
+              <option value="chambre_simple">Chambre simple</option>
+              <option value="studio_moderne">Studio moderne</option>
+              <option value="studio_simple">Studio simple</option>
+              <option value="appartement_moderne">Appartement moderne</option>
+              <option value="appartement_simple">Appartement simple</option>
+              <option value="local_commerce">Local pour commerce</option>
+              <option value="local_autre">Local pour autre activité</option>
+            </select>
+          </div>
+
+          <!-- Chambres / Douches / Salons (conditionnel) -->
+          <div id="roomsFields" class="hidden grid sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-primary mb-1.5">Nombre de chambres</label>
+              <select class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none bg-white">
+                <option value="">—</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+                <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-primary mb-1.5">Nombre de douches</label>
+              <select class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none bg-white">
+                <option value="">—</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-primary mb-1.5">Nombre de salons</label>
+              <select class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none bg-white">
+                <option value="">—</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Eau & Électricité -->
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-primary mb-1.5">Eau</label>
+              <select required class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none bg-white">
+                <option value="oui">Avec eau</option>
+                <option value="non">Sans eau</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-primary mb-1.5">Électricité</label>
+              <select required class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none bg-white">
+                <option value="oui">Avec électricité</option>
+                <option value="non">Sans électricité</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quartier -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Nom du quartier *</label>
+            <input type="text" required placeholder="Ex: Akwa, Bonanjo, Makepe..."
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none">
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Description (max 250 mots)</label>
+            <textarea id="description" rows="4" maxlength="1500" placeholder="Décrivez le logement, les points forts, l’environnement..."
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none resize-none"></textarea>
+            <p class="text-xs text-secondary mt-1"><span id="wordCount">0</span> / 250 mots</p>
+          </div>
+
+          <!-- Photos (max 10) -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Photos du logement <span class="text-secondary font-normal">(max 10)</span></label>
+            <div class="border-2 border-dashed border-light rounded-xl p-6 text-center hover:border-accent transition cursor-pointer">
+              <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" id="photos" max="10">
+              <label for="photos" class="cursor-pointer">
+                <svg class="w-10 h-10 mx-auto text-accent mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <p class="text-sm text-secondary">Cliquez pour ajouter des photos (1 à 10 images)</p>
+                <p class="text-xs text-secondary mt-1">JPG, PNG, WebP – max 5 Mo chacune</p>
+              </label>
+            </div>
+            <div id="photoPreview" class="mt-3 grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+            <p id="photoCount" class="text-xs text-secondary mt-1 hidden"><span id="photoCountNum">0</span> / 10 photos sélectionnées</p>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl font-semibold text-white bg-accent hover:bg-secondary transition">
+            Envoyer la soumission
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========== TAB: MES SOUMISSIONS ========== -->
+    <div id="tab-mysubs" class="tab-content hidden">
+      <h2 class="text-xl font-bold text-primary mb-6">Mes soumissions</h2>
+      <div class="space-y-4">
+        <!-- Exemple soumission -->
+        <div class="bg-white rounded-2xl border border-light/50 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-medium bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">En attente</span>
+              <span class="text-sm text-secondary">Studio moderne · Akwa</span>
+            </div>
+            <p class="text-sm text-secondary">Soumis le 08/10/2026</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border border-accent text-accent hover:bg-accent hover:text-white transition">Modifier</button>
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border border-red-300 text-red-600 hover:bg-red-50 transition">Supprimer</button>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-light/50 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-medium bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Publié</span>
+              <span class="text-sm text-secondary">Appartement moderne · Bonanjo</span>
+            </div>
+            <p class="text-sm text-secondary">Publié le 05/10/2026</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border border-accent text-accent hover:bg-accent hover:text-white transition">Modifier</button>
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border border-red-300 text-red-600 hover:bg-red-50 transition">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB: PROFIL ========== -->
+    <div id="tab-profile" class="tab-content hidden">
+      <div class="bg-white rounded-2xl shadow-sm border border-light/50 p-6 md:p-8 max-w-lg">
+        <h2 class="text-xl font-bold text-primary mb-6">Mon profil</h2>
+        <div class="space-y-4 text-sm">
+          <div class="flex justify-between py-2 border-b border-light"><span class="text-secondary">Nom</span><span class="font-medium">Jean Dupont</span></div>
+          <div class="flex justify-between py-2 border-b border-light"><span class="text-secondary">Email</span><span class="font-medium">jean@email.com</span></div>
+          <div class="flex justify-between py-2 border-b border-light"><span class="text-secondary">Sexe</span><span class="font-medium">Homme</span></div>
+          <div class="flex justify-between py-2 border-b border-light"><span class="text-secondary">WhatsApp</span><span class="font-medium">+237 6XX XXX XXX</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+<script src="../js/landlord.js"></script>
+</body>
+</html>
