@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription – LookForHome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A1931',
+            secondary: '#1A3D63',
+            accent: '#4A7FA7',
+            light: '#B3CFE5',
+            bg: '#F6FAFD',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+
+  </head>
+<body class="bg-bg min-h-screen flex flex-col">
+
+  <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html"><img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-10"></a>
+      <a href="login.html" class="text-sm font-medium text-accent hover:underline">Déjà un compte ?</a>
+    </div>
+  </header>
+
+  <main class="flex-1 flex items-center justify-center p-4 py-10">
+    <div class="w-full max-w-lg">
+      <div class="bg-white rounded-2xl shadow-lg border border-light/50 p-6 md:p-8">
+        <div class="text-center mb-6">
+          <h1 class="text-2xl font-bold text-primary mb-2">Créer un compte</h1>
+          <p class="text-secondary text-sm">Rejoignez LookForHome en quelques secondes</p>
+        </div>
+
+        <!-- Role selection -->
+        <div class="flex rounded-xl bg-bg p-1 mb-6">
+          <button type="button" data-role="tenant" class="role-tab flex-1 py-2.5 text-sm font-medium rounded-lg bg-accent text-white transition">Locataire</button>
+          <button type="button" data-role="landlord" class="role-tab flex-1 py-2.5 text-sm font-medium rounded-lg text-secondary transition">Bailleur</button>
+          <button type="button" data-role="admin" class="role-tab flex-1 py-2.5 text-sm font-medium rounded-lg text-secondary transition">Admin</button>
+        </div>
+
+        <form id="registerForm" class="space-y-4">
+          <input type="hidden" id="role" value="tenant">
+
+          <!-- Nom -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Nom</label>
+            <input type="text" required placeholder="Jean Dupont"
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+          </div>
+
+          <!-- Prénom (Admin only) -->
+          <div id="prenomField" class="hidden">
+            <label class="block text-sm font-medium text-primary mb-1.5">Prénom</label>
+            <input type="text" placeholder="Prénom"
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Adresse email</label>
+            <input type="email" required placeholder="exemple@email.com"
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+          </div>
+
+          <!-- Sexe -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Sexe</label>
+            <select required class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition bg-white">
+              <option value="homme">Homme</option>
+              <option value="femme">Femme</option>
+            </select>
+          </div>
+
+          <!-- WhatsApp -->
+          <div>
+            <label class="block text-sm font-medium text-primary mb-1.5">Numéro WhatsApp</label>
+            <div class="flex">
+              <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-light bg-bg text-secondary text-sm">+237</span>
+              <input type="tel" required placeholder="6XX XXX XXX"
+                class="flex-1 px-4 py-3 rounded-r-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+            </div>
+          </div>
+
+          <!-- Mot de passe (Bailleur & Locataire) -->
+          <div id="passwordField">
+            <label class="block text-sm font-medium text-primary mb-1.5">Mot de passe</label>
+            <input type="password" required minlength="6" placeholder="Minimum 6 caractères"
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+          </div>
+
+          <!-- Code Admin -->
+          <div id="adminCodeField" class="hidden">
+            <label class="block text-sm font-medium text-primary mb-1.5">Code administrateur</label>
+            <input type="text" placeholder="Code secret fourni par LookForHome"
+              class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition">
+            <p class="text-xs text-secondary mt-1">Ce code est réservé aux administrateurs autorisés.</p>
+          </div>
+
+          <label class="flex items-start gap-3 cursor-pointer pt-2">
+            <input type="checkbox" required class="mt-1 w-4 h-4 rounded border-light text-accent focus:ring-accent">
+            <span class="text-sm text-secondary">J’accepte la <a href="privacy.html" class="text-accent underline">politique de confidentialité</a></span>
+          </label>
+
+          <button type="submit"
+            class="w-full py-3.5 rounded-xl font-semibold text-white bg-accent hover:bg-secondary transition shadow-md mt-2">
+            Créer mon compte
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+    <script src="../js/api.js"></script>
+  <script src="../js/register.js"></script>
+  </body>
+</html>

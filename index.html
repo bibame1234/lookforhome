@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LookForHome – Trouvez votre logement idéal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A1931',
+            secondary: '#1A3D63',
+            accent: '#4A7FA7',
+            light: '#B3CFE5',
+            bg: '#F6FAFD',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+
+  </head>
+<body class="bg-bg text-primary min-h-screen">
+
+  <!-- ========== PRIVACY POLICY MODAL (obligatoire au premier chargement) ========== -->
+  <div id="privacyModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-primary/80 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 md:p-8">
+        <div class="flex justify-center mb-6">
+          <img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-16 w-auto">
+        </div>
+        <h2 class="text-2xl font-bold text-primary mb-4 text-center">Politique de confidentialité</h2>
+        <div class="text-sm text-secondary space-y-3 mb-6 leading-relaxed">
+          <p>Bienvenue sur <strong>LookForHome</strong>. En utilisant notre plateforme, vous acceptez les conditions suivantes :</p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>Nous collectons uniquement les informations nécessaires (nom, email, téléphone WhatsApp, sexe) pour le bon fonctionnement du service.</li>
+            <li>Vos données ne sont jamais vendues à des tiers.</li>
+            <li>Les photos des logements restent privées jusqu’au paiement de la visite.</li>
+            <li>Les communications se font uniquement via WhatsApp et SMS sécurisés.</li>
+            <li>Vous pouvez demander la suppression de votre compte à tout moment.</li>
+            <li>Les paiements sont traités par des prestataires sécurisés (Mobile Money).</li>
+          </ul>
+          <p class="mt-4">Pour toute question : <span class="font-medium text-accent">suppotlookforhome@gmail.com</span></p>
+        </div>
+        <label class="flex items-start gap-3 cursor-pointer mb-6">
+          <input type="checkbox" id="acceptPrivacy" class="mt-1 w-5 h-5 rounded border-accent text-accent focus:ring-accent">
+          <span class="text-sm text-primary">J’ai lu et j’accepte la politique de confidentialité et les conditions d’utilisation de LookForHome.</span>
+        </label>
+        <button id="acceptBtn" disabled
+          class="w-full py-3.5 rounded-xl font-semibold text-white bg-accent hover:bg-secondary transition disabled:opacity-40 disabled:cursor-not-allowed">
+          Accéder au site
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== HEADER ========== -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-2">
+          <img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-10 md:h-12 w-auto">
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+          <a href="#comment-ca-marche" class="text-secondary hover:text-accent transition">Comment ça marche</a>
+          <a href="#annonces" class="text-secondary hover:text-accent transition">Annonces</a>
+          <a href="login.html" class="text-secondary hover:text-accent transition">Connexion</a>
+          <a href="register.html" class="bg-accent text-white px-5 py-2.5 rounded-xl hover:bg-secondary transition">Créer un compte</a>
+        </nav>
+        <button id="mobileMenuBtn" class="md:hidden p-2 text-primary">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-light">
+      <div class="px-4 py-4 space-y-3">
+        <a href="#comment-ca-marche" class="block text-secondary font-medium">Comment ça marche</a>
+        <a href="#annonces" class="block text-secondary font-medium">Annonces</a>
+        <a href="login.html" class="block text-secondary font-medium">Connexion</a>
+        <a href="register.html" class="block bg-accent text-white text-center py-2.5 rounded-xl font-medium">Créer un compte</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent text-white">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-light rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-light rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+          Trouvez votre<br>
+          <span class="text-light">logement idéal</span>
+        </h1>
+        <p class="text-lg md:text-xl text-light/90 mb-8 leading-relaxed">
+          LookForHome connecte bailleurs et locataires en toute simplicité dans la  ville de Sangmélima. 
+          Des logements vérifiés, un contact direct via WhatsApp avec le bailleur et une expérience sécurisée.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="register.html?role=tenant" class="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-4 rounded-xl hover:bg-light transition shadow-lg">
+            Je cherche un logement
+          </a>
+          <a href="register.html?role=landlord" class="inline-flex items-center justify-center gap-2 bg-accent/30 backdrop-blur border border-light/30 text-white font-semibold px-8 py-4 rounded-xl hover:bg-accent/50 transition">
+            Je suis bailleur
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMMENT ÇA MARCHE ========== -->
+  <section id="comment-ca-marche" class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Comment ça marche ?</h2>
+        <p class="text-secondary max-w-2xl mx-auto">Trois étapes simples pour trouver ou publier votre logement</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-bg rounded-2xl p-8 text-center border border-light/50 hover:shadow-lg transition">
+          <div class="w-16 h-16 bg-accent/10 text-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold">1</div>
+          <h3 class="text-xl font-semibold text-primary mb-3">Créez votre compte</h3>
+          <p class="text-secondary text-sm leading-relaxed">Inscription rapide en tant que locataire ou bailleur. Renseignez votre numéro WhatsApp pour un contact direct.</p>
+        </div>
+        <div class="bg-bg rounded-2xl p-8 text-center border border-light/50 hover:shadow-lg transition">
+          <div class="w-16 h-16 bg-accent/10 text-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold">2</div>
+          <h3 class="text-xl font-semibold text-primary mb-3">Parcourez ou publiez</h3>
+          <p class="text-secondary text-sm leading-relaxed">Les locataires consultent les annonces. Les bailleurs soumettent leurs logements.</p>
+        </div>
+        <div class="bg-bg rounded-2xl p-8 text-center border border-light/50 hover:shadow-lg transition">
+          <div class="w-16 h-16 bg-accent/10 text-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-bold">3</div>
+          <h3 class="text-xl font-semibold text-primary mb-3">Débloquez & contactez</h3>
+          <p class="text-secondary text-sm leading-relaxed">Payez les frais de visite pour voir les photos des logements et contacter le bailleur directement sur WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ANNONCES EXEMPLE ========== -->
+  <section id="annonces" class="py-16 md:py-24 bg-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold text-primary mb-2">Annonces récentes</h2>
+          <p class="text-secondary">Découvrez les derniers logements publiés</p>
+        </div>
+        <a href="login.html" class="text-accent font-medium hover:underline">Voir toutes les annonces →</a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="homeListings">
+        <p class="text-secondary col-span-full text-center py-8">Chargement des annonces...</p>
+      </div>
+</section>
+
+  <!-- ========== CTA ========== -->
+  <section class="py-16 bg-primary text-white">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Prêt à trouver votre prochain logement ?</h2>
+      <p class="text-light mb-8 text-lg">Rejoignez des centaines de locataires et bailleurs qui utilisent déjà LookForHome.</p>
+      <a href="register.html" class="inline-flex items-center gap-2 bg-accent hover:bg-white hover:text-primary text-white font-semibold px-8 py-4 rounded-xl transition">
+        Créer mon compte gratuitement
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-secondary text-light py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-12 mb-4 brightness-0 invert">
+          <p class="text-sm text-light/80 max-w-sm">La plateforme qui simplifie la recherche et la publication de logements dans la ville de sangmélima.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Liens utiles</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="privacy.html" class="hover:text-white transition">Politique de confidentialité</a></li>
+            <li><a href="login.html" class="hover:text-white transition">Connexion</a></li>
+            <li><a href="register.html" class="hover:text-white transition">Inscription</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Contact</h4>
+          <ul class="space-y-2 text-sm">
+            <li>WhatsApp : +237 6XX XXX XXX</li>
+            <li>Email : lookforhome@gmail.com</li>
+            <li>sangmélima-cameroun</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-light/20 pt-6 text-center text-sm text-light/60">
+        © 2026 LookForHome. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/index.js"></script>
+</body>
+</html>

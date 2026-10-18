@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Locataire – LookForHome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A1931',
+            secondary: '#1A3D63',
+            accent: '#4A7FA7',
+            light: '#B3CFE5',
+            bg: '#F6FAFD',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+
+  </head>
+<body class="bg-bg min-h-screen">
+
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html"><img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-10"></a>
+      <div class="flex items-center gap-3">
+        <button id="favBtn" class="p-2 text-secondary hover:text-accent" title="Favoris">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+        <button onclick="openSupport()" class="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline">
+          Écrire au service client
+        </button>
+        <button onclick="logout()" class="text-sm font-medium text-secondary hover:text-accent">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Filters -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-8">
+      <select id="filterType" class="px-4 py-2.5 rounded-xl border border-light bg-white text-sm focus:border-accent outline-none">
+        <option value="">Tous les types</option>
+        <option value="CHAMBRE_MODERNE">Chambre moderne</option>
+        <option value="CHAMBRE_SIMPLE">Chambre simple</option>
+        <option value="STUDIO_MODERNE">Studio moderne</option>
+        <option value="STUDIO_SIMPLE">Studio simple</option>
+        <option value="APPARTEMENT_MODERNE">Appartement moderne</option>
+        <option value="APPARTEMENT_SIMPLE">Appartement simple</option>
+        <option value="LOCAL_COMMERCE">Local commerce</option>
+        <option value="LOCAL_AUTRE">Local autre</option>
+      </select>
+      <input id="filterNeighborhood" type="text" placeholder="Rechercher un quartier..." class="flex-1 px-4 py-2.5 rounded-xl border border-light focus:border-accent outline-none text-sm">
+      <button id="filterBtn" type="button" class="px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:bg-secondary transition">Filtrer</button>
+    </div>
+
+    <h2 class="text-xl font-bold text-primary mb-6">Annonces disponibles</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="listingsGrid">
+
+      <!-- Listing 1 - Locked -->
+      <article class="listing-card bg-white rounded-2xl overflow-hidden shadow-sm border border-light/60" data-id="1" data-unlocked="false">
+        <div class="relative h-52 overflow-hidden bg-light">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop" class="w-full h-full object-cover blurred" alt="">
+          <div class="lock-overlay absolute inset-0 bg-primary/50 flex flex-col items-center justify-center gap-2">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="text-white text-sm font-medium">Photos verrouillées</span>
+          </div>
+          <span class="absolute top-3 left-3 bg-accent text-white text-xs font-medium px-2.5 py-1 rounded-lg">Studio moderne</span>
+          <button class="fav-toggle absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-secondary hover:text-red-500 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-primary mb-1">Studio moderne – Akwa</h3>
+          <p class="text-sm text-secondary mb-3">Quartier Akwa · Douala</p>
+          <div class="flex flex-wrap gap-1.5 text-xs mb-4">
+            <span class="bg-bg px-2 py-1 rounded text-secondary">1 chambre</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">1 douche</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">Eau ✓</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">Électricité ✓</span>
+          </div>
+          <p class="text-sm text-secondary mb-4 line-clamp-2">Beau studio moderne entièrement meublé, proche des commodités, idéal pour étudiant ou jeune professionnel.</p>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-accent font-semibold text-sm">Visite : 2 000 FCFA</span>
+            <button onclick="unlockListing(1)" class="unlock-btn px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-secondary transition">
+              Débloquer
+            </button>
+          </div>
+          <a href="https://wa.me/2376XXXXXXXX" target="_blank" class="contact-btn hidden mt-3 w-full py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium text-center hover:bg-green-700 transition">
+            Contacter le bailleur par WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Listing 2 - Locked -->
+      <article class="listing-card bg-white rounded-2xl overflow-hidden shadow-sm border border-light/60" data-id="2" data-unlocked="false">
+        <div class="relative h-52 overflow-hidden bg-light">
+          <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop" class="w-full h-full object-cover blurred" alt="">
+          <div class="lock-overlay absolute inset-0 bg-primary/50 flex flex-col items-center justify-center gap-2">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="text-white text-sm font-medium">Photos verrouillées</span>
+          </div>
+          <span class="absolute top-3 left-3 bg-accent text-white text-xs font-medium px-2.5 py-1 rounded-lg">Appartement moderne</span>
+          <button class="fav-toggle absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-secondary hover:text-red-500 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-primary mb-1">Appartement 3 chambres – Bonanjo</h3>
+          <p class="text-sm text-secondary mb-3">Quartier Bonanjo · Douala</p>
+          <div class="flex flex-wrap gap-1.5 text-xs mb-4">
+            <span class="bg-bg px-2 py-1 rounded text-secondary">3 chambres</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">2 douches</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">2 salons</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">Eau ✓</span>
+          </div>
+          <p class="text-sm text-secondary mb-4 line-clamp-2">Spacieux appartement moderne avec vue, sécurisé, dans un quartier résidentiel calme.</p>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-accent font-semibold text-sm">Visite : 3 500 FCFA</span>
+            <button onclick="unlockListing(2)" class="unlock-btn px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-secondary transition">
+              Débloquer
+            </button>
+          </div>
+          <a href="https://wa.me/2376XXXXXXXX" target="_blank" class="contact-btn hidden mt-3 w-full py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium text-center hover:bg-green-700 transition">
+            Contacter le bailleur par WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Listing 3 - Already unlocked example -->
+      <article class="listing-card unlocked bg-white rounded-2xl overflow-hidden shadow-sm border border-light/60" data-id="3" data-unlocked="true">
+        <div class="relative h-52 overflow-hidden bg-light">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop" class="w-full h-full object-cover" alt="">
+          <span class="absolute top-3 left-3 bg-accent text-white text-xs font-medium px-2.5 py-1 rounded-lg">Chambre moderne</span>
+          <button class="fav-toggle absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-red-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-primary mb-1">Chambre moderne – Makepe</h3>
+          <p class="text-sm text-secondary mb-3">Quartier Makepe · Douala</p>
+          <div class="flex flex-wrap gap-1.5 text-xs mb-4">
+            <span class="bg-bg px-2 py-1 rounded text-secondary">Eau ✓</span>
+            <span class="bg-bg px-2 py-1 rounded text-secondary">Électricité ✓</span>
+          </div>
+          <p class="text-sm text-secondary mb-4 line-clamp-2">Chambre moderne bien aérée, dans une résidence calme, proche des transports.</p>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-green-600 font-semibold text-sm">✓ Déjà débloqué</span>
+          </div>
+          <a href="https://wa.me/2376XXXXXXXX" target="_blank" class="contact-btn mt-3 w-full py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium text-center hover:bg-green-700 transition block">
+            Contacter le bailleur par WhatsApp
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/70 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+      <h3 class="text-xl font-bold text-primary mb-2">Débloquer la visite</h3>
+      <p class="text-secondary text-sm mb-6">Payez pour voir les photos en clair et contacter le bailleur. Une fois débloqué, ce logement restera accessible pour vous.</p>
+      <div class="bg-bg rounded-xl p-4 mb-6 text-center">
+        <p class="text-sm text-secondary">Montant de la visite</p>
+        <p class="text-3xl font-bold text-accent" id="payAmount">2 000 FCFA</p>
+      </div>
+      <div class="space-y-3 mb-6">
+        <button class="w-full py-3 rounded-xl border-2 border-yellow-400 bg-yellow-50 text-yellow-800 font-medium hover:bg-yellow-100 transition flex items-center justify-center gap-2">
+          <span>🟡</span> MTN Mobile Money
+        </button>
+        <button class="w-full py-3 rounded-xl border-2 border-orange-400 bg-orange-50 text-orange-800 font-medium hover:bg-orange-100 transition flex items-center justify-center gap-2">
+          <span>🟠</span> Orange Money
+        </button>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="closePayment()" class="flex-1 py-3 rounded-xl border border-light text-secondary font-medium hover:bg-bg transition">Annuler</button>
+        <button onclick="confirmPayment()" class="flex-1 py-3 rounded-xl bg-accent text-white font-medium hover:bg-secondary transition">Payer maintenant</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support Modal -->
+  <div id="supportModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/70 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+      <h3 class="text-xl font-bold text-primary mb-4">Écrire au service client</h3>
+      <textarea rows="4" placeholder="Décrivez votre problème ou votre question..." class="w-full px-4 py-3 rounded-xl border border-light focus:border-accent outline-none resize-none mb-4"></textarea>
+      <div class="flex gap-3">
+        <button onclick="closeSupport()" class="flex-1 py-3 rounded-xl border border-light text-secondary font-medium">Annuler</button>
+        <button onclick="sendSupport()" class="flex-1 py-3 rounded-xl bg-accent text-white font-medium hover:bg-secondary transition">Envoyer</button>
+      </div>
+    </div>
+  </div>
+<script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+<script src="../js/tenant.js"></script>
+</body>
+</html>

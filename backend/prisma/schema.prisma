@@ -1,0 +1,172 @@
+// ========================================
+// LookForHome – Schéma Prisma
+// ========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Utilisateurs ----------
+enum Role {
+  LANDLORD
+  TENANT
+  ADMIN
+}
+
+enum Gender {
+  HOMME
+  FEMME
+  AUTRE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  firstName    String?  // utilisé surtout pour Admin
+  email        String   @unique
+  password     String   // hashé avec bcrypt
+  gender       Gender?
+  whatsapp     String
+  role         Role
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  listings     Listing[]          @relation("LandlordListings")   // bailleur
+  submissions  Listing[]          @relation("SubmittedBy")        // soumissions bailleur
+  unlocked     UnlockedListing[]
+  favorites    Favorite[]
+  visits       Visit[]
+  notifications NotificationLog[]
+
+  @@map("users")
+}
+
+// ---------- Types de logement ----------
+enum HousingType {
+  CHAMBRE_MODERNE
+  CHAMBRE_SIMPLE
+  STUDIO_MODERNE
+  STUDIO_SIMPLE
+  APPARTEMENT_MODERNE
+  APPARTEMENT_SIMPLE
+  LOCAL_COMMERCE
+  LOCAL_AUTRE
+}
+
+enum ListingStatus {
+  PENDING    // soumission bailleur en attente
+  PUBLISHED  // publié par admin
+  REJECTED
+  ARCHIVED
+}
+
+model Listing {
+  id            String        @id @default(cuid())
+  type          HousingType
+  bedrooms      Int?          // 1-10 (studio / appartement)
+  bathrooms     Int?          // 1-5
+  livingRooms   Int?          // 1-5
+  hasWater      Boolean       @default(true)
+  hasElectricity Boolean      @default(true)
+  neighborhood  String
+  description   String        @db.Text
+  visitPrice    Int           @default(2000) // FCFA
+  status        ListingStatus @default(PENDING)
+  images        String[]      // URLs (Cloudinary / S3)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  publishedAt   DateTime?
+
+  // Qui a soumis (bailleur)
+  submittedById String?
+  submittedBy   User?         @relation("SubmittedBy", fields: [submittedById], references: [id])
+
+  // Qui a publié (admin) ou propriétaire final
+  landlordId    String?
+  landlord      User?         @relation("LandlordListings", fields: [landlordId], references: [id])
+
+  // Relations
+  unlockedBy    UnlockedListing[]
+  favorites     Favorite[]
+  visits        Visit[]
+
+  @@map("listings")
+}
+
+// ---------- Déblocages (visite payée) ----------
+model UnlockedListing {
+  id         String   @id @default(cuid())
+  userId     String
+  listingId  String
+  unlockedAt DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId]) // un utilisateur ne paie qu'une fois
+  @@map("unlocked_listings")
+}
+
+// ---------- Favoris ----------
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  listingId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
+  @@map("favorites")
+}
+
+// ---------- Historique des visites (paiements) ----------
+model Visit {
+  id            String   @id @default(cuid())
+  userId        String
+  listingId     String
+  amount        Int      // FCFA
+  paymentMethod String?  // MTN_MOMO | ORANGE_MONEY | CARD
+  transactionId String?  // ID retourné par Campay / CamerPay
+  status        String   @default("SUCCESS") // SUCCESS | FAILED | PENDING
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing       Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@map("visits")
+}
+
+// ---------- Logs de notifications ----------
+model NotificationLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  channel   String   // SMS | WHATSAPP
+  message   String   @db.Text
+  status    String   @default("SENT") // SENT | FAILED
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("notification_logs")
+}
+
+// ---------- Paramètres globaux (singleton) ----------
+model Setting {
+  id               Int     @id @default(1)
+  defaultVisitPrice Int    @default(2000)
+  supportWhatsapp  String  @default("+2376XXXXXXXX")
+  supportSms       String  @default("+2376XXXXXXXX")
+  adminCode        String  @default("LFH-ADMIN-2026")
+  updatedAt        DateTime @updatedAt
+
+  @@map("settings")
+}
