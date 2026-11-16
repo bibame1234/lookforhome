@@ -26,14 +26,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 
   </head>
 <body class="bg-bg min-h-screen">
 
   <header class="bg-white shadow-sm sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="index.html"><img src="../assets/logo-lookforhome.jpg" alt="LookForHome" class="h-10"></a>
+      <a href="index.html"><img src="assets/logo-lookforhome.jpg" alt="LookForHome" class="site-logo"></a>
       <div class="flex items-center gap-3">
         <button id="favBtn" class="p-2 text-secondary hover:text-accent" title="Favoris">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -170,22 +170,41 @@
   <div id="paymentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/70 backdrop-blur-sm p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
       <h3 class="text-xl font-bold text-primary mb-2">Débloquer la visite</h3>
-      <p class="text-secondary text-sm mb-6">Payez pour voir les photos en clair et contacter le bailleur. Une fois débloqué, ce logement restera accessible pour vous.</p>
-      <div class="bg-bg rounded-xl p-4 mb-6 text-center">
+      <p class="text-secondary text-sm mb-4">Payez par Mobile Money pour voir les photos et contacter le bailleur. Une fois payé, le logement reste accessible pour vous.</p>
+      <div class="bg-bg rounded-xl p-4 mb-4 text-center">
         <p class="text-sm text-secondary">Montant de la visite</p>
         <p class="text-3xl font-bold text-accent" id="payAmount">2 000 FCFA</p>
       </div>
-      <div class="space-y-3 mb-6">
-        <button class="w-full py-3 rounded-xl border-2 border-yellow-400 bg-yellow-50 text-yellow-800 font-medium hover:bg-yellow-100 transition flex items-center justify-center gap-2">
-          <span>🟡</span> MTN Mobile Money
-        </button>
-        <button class="w-full py-3 rounded-xl border-2 border-orange-400 bg-orange-50 text-orange-800 font-medium hover:bg-orange-100 transition flex items-center justify-center gap-2">
-          <span>🟠</span> Orange Money
-        </button>
+
+      <div id="payFormStep">
+        <div class="mb-3">
+          <label class="block text-sm font-medium text-primary mb-1">Opérateur</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="payMtn" class="pay-op py-2.5 rounded-xl border-2 border-yellow-400 bg-yellow-50 text-yellow-800 text-sm font-medium" data-op="MTN_MOMO">🟡 MTN MoMo</button>
+            <button type="button" id="payOrange" class="pay-op py-2.5 rounded-xl border-2 border-light text-secondary text-sm font-medium" data-op="ORANGE_MONEY">🟠 Orange</button>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-primary mb-1">Numéro Mobile Money</label>
+          <div class="flex">
+            <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-light bg-bg text-secondary text-sm">+237</span>
+            <input type="tel" id="payPhone" placeholder="6XX XXX XXX" maxlength="9"
+              class="flex-1 px-3 py-2.5 rounded-r-xl border border-light focus:border-accent outline-none text-sm">
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button type="button" onclick="closePayment()" class="flex-1 py-3 rounded-xl border border-light text-secondary font-medium hover:bg-bg transition">Annuler</button>
+          <button type="button" id="paySubmitBtn" onclick="startPayment()" class="flex-1 py-3 rounded-xl bg-accent text-white font-medium hover:bg-secondary transition">Payer</button>
+        </div>
       </div>
-      <div class="flex gap-3">
-        <button onclick="closePayment()" class="flex-1 py-3 rounded-xl border border-light text-secondary font-medium hover:bg-bg transition">Annuler</button>
-        <button onclick="confirmPayment()" class="flex-1 py-3 rounded-xl bg-accent text-white font-medium hover:bg-secondary transition">Payer maintenant</button>
+
+      <div id="payWaitStep" class="hidden text-center">
+        <div class="animate-pulse mb-4">
+          <p class="text-primary font-medium" id="payWaitMsg">Validez le paiement sur votre téléphone…</p>
+          <p class="text-sm text-secondary mt-2" id="payUssd"></p>
+        </div>
+        <p class="text-xs text-secondary mb-4">Ne fermez pas cette fenêtre. Vérification automatique…</p>
+        <button type="button" onclick="closePayment()" class="w-full py-2.5 rounded-xl border border-light text-secondary text-sm">Annuler</button>
       </div>
     </div>
   </div>
@@ -201,8 +220,8 @@
       </div>
     </div>
   </div>
-<script src="../js/api.js"></script>
-  <script src="../js/common.js"></script>
-<script src="../js/tenant.js"></script>
+<script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+<script src="js/tenant.js"></script>
 </body>
 </html>

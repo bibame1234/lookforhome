@@ -1,13 +1,51 @@
 /* ========================================
-   LookForHome – Styles communs
+   LookForHome – Styles communs + animations
    ======================================== */
 
-/* Police de base */
 body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Images floutées (annonces non débloquées) */
+/* ---------- Logo ---------- */
+.site-logo {
+  height: 2.75rem;
+  width: auto;
+  max-width: 11rem;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .site-logo {
+    height: 3.25rem;
+    max-width: 13rem;
+  }
+}
+
+.site-logo-lg {
+  height: 4rem;
+  width: auto;
+  max-width: 12rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border-radius: 0.75rem;
+}
+
+.site-logo-footer {
+  height: 3rem;
+  width: auto;
+  max-width: 10rem;
+  object-fit: contain;
+  display: block;
+  border-radius: 0.5rem;
+  filter: brightness(0) invert(1);
+}
+
+/* ---------- Images floutées ---------- */
 .blurred-img,
 .blurred {
   filter: blur(12px);
@@ -19,7 +57,6 @@ body {
   filter: blur(0);
 }
 
-/* Utilitaires supplémentaires */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -27,7 +64,149 @@ body {
   overflow: hidden;
 }
 
-/* Animation douce pour les modals */
+/* ---------- Hero animations ---------- */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.08); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatSoft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.hero-animated {
+  background: linear-gradient(-45deg, #0A1931, #1A3D63, #4A7FA7, #1A3D63, #0A1931);
+  background-size: 300% 300%;
+  animation: gradientShift 14s ease infinite;
+}
+
+.hero-title-line {
+  opacity: 0;
+  animation: heroFadeUp 0.8s ease forwards;
+}
+
+.hero-title-line:nth-child(1) { animation-delay: 0.15s; }
+.hero-title-line:nth-child(2) { animation-delay: 0.35s; }
+
+.hero-subtitle {
+  opacity: 0;
+  animation: heroFadeUp 0.8s ease 0.55s forwards;
+}
+
+.hero-cta {
+  opacity: 0;
+  animation: heroFadeUp 0.8s ease 0.75s forwards;
+}
+
+.hero-orb {
+  animation: heroGlow 8s ease-in-out infinite, floatSoft 6s ease-in-out infinite;
+}
+
+.hero-highlight {
+  background: linear-gradient(90deg, #B3CFE5, #ffffff, #B3CFE5, #4A7FA7, #B3CFE5);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s linear infinite;
+}
+
+/* ---------- Carrousel annonces ---------- */
+.listings-carousel {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.listings-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  animation: carouselScroll 40s linear infinite;
+  padding: 0.5rem 0 1rem;
+}
+
+.listings-carousel:hover .listings-track {
+  animation-play-state: paused;
+}
+
+@keyframes carouselScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.carousel-card {
+  flex: 0 0 auto;
+  width: min(300px, 78vw);
+  background: #fff;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba(179, 207, 229, 0.55);
+  box-shadow: 0 4px 20px rgba(10, 25, 49, 0.06);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.carousel-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(10, 25, 49, 0.14);
+}
+
+.carousel-card img {
+  transition: transform 0.5s ease;
+}
+
+.carousel-card:hover img {
+  transform: scale(1.06);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid rgba(179, 207, 229, 0.8);
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0A1931;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.carousel-btn:hover {
+  background: #4A7FA7;
+  color: #fff;
+}
+
+.carousel-btn.prev { left: 0.25rem; }
+.carousel-btn.next { right: 0.25rem; }
+
+@media (max-width: 640px) {
+  .carousel-btn { display: none; }
+  .listings-carousel {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
 .modal-enter {
   animation: fadeIn 0.25s ease-out;
 }
