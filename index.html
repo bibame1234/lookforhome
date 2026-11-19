@@ -18,163 +18,126 @@
             xmas: '#C41E3A',
             gold: '#FFD54F',
           },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .hero-photo { --hero-bg: url('assets/hero-bg.jpg'); }
+  </style>
 </head>
 <body class="bg-bg text-primary min-h-screen">
 
-  <!-- Bandeau Noël -->
-  <div class="xmas-banner">
-    🎄 Joyeuses fêtes — Trouvez votre logement idéal pour la nouvelle année avec LookForHome ✨
-  </div>
-
-  <!-- Privacy modal -->
   <div id="privacyModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-primary/80 backdrop-blur-sm p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto modal-enter">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
       <div class="p-6 md:p-8">
-        <div class="flex justify-center mb-6">
-          <span class="brand-text-modal">LOOKFORHOME</span>
-        </div>
+        <div class="flex justify-center mb-6"><span class="brand-text-modal">LOOKFORHOME</span></div>
         <h2 class="text-2xl font-bold text-primary mb-4 text-center">Politique de confidentialité</h2>
         <div class="text-sm text-secondary space-y-3 mb-6 leading-relaxed">
           <p>Bienvenue sur <strong>LookForHome</strong>. En utilisant notre plateforme, vous acceptez les conditions suivantes :</p>
           <ul class="list-disc pl-5 space-y-2">
-            <li>Nous collectons uniquement les informations nécessaires (nom, email, téléphone WhatsApp, sexe) pour le bon fonctionnement du service.</li>
+            <li>Nous collectons uniquement les informations nécessaires au service.</li>
             <li>Vos données ne sont jamais vendues à des tiers.</li>
-            <li>Les photos des logements restent privées jusqu’au paiement de la visite.</li>
-            <li>Les communications se font uniquement via WhatsApp et SMS sécurisés.</li>
+            <li>Les photos restent privées jusqu’au paiement de la mise en contact / visite.</li>
             <li>Vous pouvez demander la suppression de votre compte à tout moment.</li>
-            <li>Les paiements sont traités par des prestataires sécurisés (Mobile Money).</li>
           </ul>
-          <p class="mt-4">Pour toute question : <span class="font-medium text-accent">support@lookforhome.com</span></p>
         </div>
         <label class="flex items-start gap-3 mb-6 cursor-pointer">
-          <input type="checkbox" id="acceptPrivacy" class="mt-1 w-5 h-5 rounded border-accent text-accent focus:ring-accent">
-          <span class="text-sm text-primary">J’ai lu et j’accepte la politique de confidentialité et les conditions d’utilisation de LookForHome.</span>
+          <input type="checkbox" id="acceptPrivacy" class="mt-1 w-5 h-5 rounded border-accent text-accent">
+          <span class="text-sm text-primary">J’accepte la politique de confidentialité.</span>
         </label>
-        <button id="acceptBtn" disabled
-          class="w-full py-3.5 rounded-xl font-semibold text-white bg-accent hover:bg-secondary transition disabled:opacity-40 disabled:cursor-not-allowed">
-          Accéder au site
-        </button>
+        <button id="acceptBtn" disabled class="w-full py-3.5 rounded-xl font-semibold text-white bg-accent disabled:opacity-40">Accéder au site</button>
       </div>
     </div>
   </div>
 
-  <!-- Header -->
   <header class="bg-white/95 backdrop-blur sticky top-0 z-50 shadow-sm border-b border-light/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 md:h-18">
-        <a href="index.html" class="flex items-center">
-          <span class="brand-text">LOOKFORHOME</span>
-        </a>
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html"><span class="brand-text">LOOKFORHOME</span></a>
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-          <a href="#comment-ca-marche" class="text-secondary hover:text-accent transition">Comment ça marche</a>
-          <a href="#annonces" class="text-secondary hover:text-accent transition">Annonces</a>
-          <a href="login.html" class="text-secondary hover:text-accent transition">Connexion</a>
-          <a href="register.html" class="bg-accent text-white px-5 py-2.5 rounded-xl hover:bg-secondary transition shadow-md shadow-accent/25">Créer un compte</a>
+          <a href="#comment-ca-marche" class="text-secondary hover:text-accent">Comment ça marche</a>
+          <a href="#annonces" class="text-secondary hover:text-accent">Annonces</a>
+          <a href="login.html" class="text-secondary hover:text-accent">Connexion</a>
+          <a href="register.html" class="bg-accent text-white px-5 py-2.5 rounded-xl hover:bg-secondary">Créer un compte</a>
         </nav>
-        <button id="mobileMenuBtn" class="md:hidden p-2 text-primary" aria-label="Menu">
+        <button id="mobileMenuBtn" class="md:hidden p-2 text-primary">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
-    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-light">
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
       <div class="px-4 py-4 space-y-3">
         <a href="#comment-ca-marche" class="block text-secondary font-medium">Comment ça marche</a>
         <a href="#annonces" class="block text-secondary font-medium">Annonces</a>
         <a href="login.html" class="block text-secondary font-medium">Connexion</a>
-        <a href="register.html" class="block bg-accent text-white text-center py-2.5 rounded-xl font-medium">Créer un compte</a>
+        <a href="register.html" class="block bg-accent text-white text-center py-2.5 rounded-xl">Créer un compte</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden hero-animated text-white">
-    <div class="absolute inset-0 pointer-events-none" id="snowContainer"></div>
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="hero-orb absolute top-16 left-8 w-64 h-64 md:w-80 md:h-80 bg-white/15 rounded-full blur-3xl"></div>
-      <div class="hero-orb absolute bottom-8 right-8 w-72 h-72 md:w-96 md:h-96 bg-xmas/25 rounded-full blur-3xl" style="animation-delay:-3s"></div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-      <div class="max-w-2xl">
-        <p class="hero-subtitle text-white/85 text-sm font-semibold tracking-widest uppercase mb-4">🎄 Édition fêtes 2026</p>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-          <span class="hero-title-line block">Trouvez votre</span>
-          <span class="hero-title-line block"><span class="hero-highlight">logement idéal</span></span>
-        </h1>
-        <p class="hero-subtitle text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
-          LookForHome connecte bailleurs et locataires en toute simplicité.
-          Logements vérifiés, contact WhatsApp direct, expérience sécurisée.
-        </p>
-        <div class="hero-cta flex flex-col sm:flex-row gap-4">
-          <a href="register.html?role=tenant" class="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-4 rounded-xl hover:bg-light transition shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300">
-            Je cherche un logement
-          </a>
-          <a href="register.html?role=landlord" class="inline-flex items-center justify-center gap-2 bg-white/15 backdrop-blur border border-white/40 text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/25 transition hover:-translate-y-0.5 duration-300">
-            Je suis bailleur
-          </a>
-        </div>
+  <section class="hero-photo text-white">
+    <div class="hero-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 w-full">
+      <p class="brand-hero mb-4">LOOKFORHOME</p>
+      <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-6 max-w-2xl">
+        <span class="hero-title-line block">Trouvez votre</span>
+        <span class="hero-title-line block"><span class="hero-highlight">logement idéal</span></span>
+      </h1>
+      <p class="hero-subtitle text-lg text-white/90 mb-8 max-w-xl leading-relaxed">
+        Logements et chauffeurs vérifiés. Contact WhatsApp sécurisé après mise en relation.
+      </p>
+      <div class="hero-cta flex flex-col sm:flex-row gap-4">
+        <a href="register.html?role=tenant" class="inline-flex justify-center bg-white text-primary font-semibold px-8 py-4 rounded-xl shadow-lg">Je cherche un logement</a>
+        <a href="register.html?role=landlord" class="inline-flex justify-center bg-white/15 border border-white/40 text-white font-semibold px-8 py-4 rounded-xl">Je suis bailleur</a>
+        <a href="register.html?role=driver" class="inline-flex justify-center bg-xmas/90 text-white font-semibold px-8 py-4 rounded-xl">Je suis chauffeur</a>
       </div>
     </div>
   </section>
 
-  <!-- Comment ça marche -->
   <section id="comment-ca-marche" class="py-16 md:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <p class="text-accent text-sm font-semibold tracking-wide uppercase mb-2">Simple & rapide</p>
+        <p class="text-accent text-sm font-semibold uppercase mb-2">Simple & rapide</p>
         <h2 class="text-2xl md:text-3xl font-bold text-primary mb-3">Comment ça marche ?</h2>
-        <p class="text-secondary max-w-2xl mx-auto">Trois étapes claires pour trouver ou publier votre logement</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+      <div class="grid md:grid-cols-3 gap-6">
         <div class="step-card">
           <div class="step-num">1</div>
           <h3 class="text-xl font-semibold text-primary mb-3">Créez votre compte</h3>
-          <p class="text-secondary text-sm leading-relaxed">Inscription rapide en tant que locataire ou bailleur. Renseignez votre WhatsApp pour un contact direct.</p>
+          <p class="text-secondary text-sm">Locataire, bailleur ou chauffeur — inscription avec WhatsApp.</p>
         </div>
         <div class="step-card">
           <div class="step-num">2</div>
-          <h3 class="text-xl font-semibold text-primary mb-3">Parcourez ou publiez</h3>
-          <p class="text-secondary text-sm leading-relaxed">Les locataires consultent les annonces validées. Les bailleurs soumettent leurs logements pour publication.</p>
+          <h3 class="text-xl font-semibold text-primary mb-3">Publiez ou parcourez</h3>
+          <p class="text-secondary text-sm">Les annonces sont vérifiées par l’admin avant publication.</p>
         </div>
         <div class="step-card">
           <div class="step-num">3</div>
-          <h3 class="text-xl font-semibold text-primary mb-3">Débloquez & contactez</h3>
-          <p class="text-secondary text-sm leading-relaxed">Payez la visite pour voir les photos en clair et contacter le bailleur directement sur WhatsApp.</p>
+          <h3 class="text-xl font-semibold text-primary mb-3">Contactez en sécurité</h3>
+          <p class="text-secondary text-sm">Payez la mise en contact (ou gratuit si activé) pour voir les photos et WhatsApp.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Annonces (celles publiées / espace locataire) -->
-  <section id="annonces" class="py-16 md:py-24 bg-bg overflow-hidden">
+  <section id="annonces" class="py-16 md:py-24 bg-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <p class="text-accent text-sm font-semibold tracking-wide uppercase mb-2">En direct</p>
+          <p class="text-accent text-sm font-semibold uppercase mb-2">En direct</p>
           <h2 class="text-2xl md:text-3xl font-bold text-primary">Annonces publiées</h2>
-          <p class="text-secondary mt-1">Les logements disponibles dans l’espace locataire</p>
+          <p class="text-secondary mt-1">Faites défiler horizontalement · logements validés</p>
         </div>
-        <a href="login.html" class="text-accent font-medium hover:underline whitespace-nowrap">Voir toutes les annonces →</a>
+        <a href="login.html" class="text-accent font-medium hover:underline">Espace locataire →</a>
       </div>
     </div>
     <div class="relative max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <button type="button" class="carousel-btn prev" id="carouselPrev" aria-label="Précédent">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button type="button" class="carousel-btn next" id="carouselNext" aria-label="Suivant">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </button>
-      <div class="listings-carousel" id="listingsCarousel">
+      <button type="button" class="carousel-btn prev" id="carouselPrev" aria-label="Précédent">‹</button>
+      <button type="button" class="carousel-btn next" id="carouselNext" aria-label="Suivant">›</button>
+      <div class="listings-carousel">
         <div class="listings-track" id="homeListings">
           <p class="text-secondary px-8 py-12">Chargement des annonces…</p>
         </div>
@@ -182,45 +145,18 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-16 bg-gradient-to-r from-primary via-secondary to-accent text-white">
     <div class="max-w-3xl mx-auto px-4 text-center">
-      <p class="text-gold text-sm font-semibold uppercase tracking-wide mb-3">🎄 Offre de saison</p>
-      <h2 class="text-2xl md:text-3xl font-bold mb-4">Prêt à trouver ou publier un logement ?</h2>
-      <p class="text-white/90 mb-8 text-lg">Rejoignez LookForHome — simple, sécurisé, et disponible sur mobile.</p>
-      <a href="register.html" class="inline-flex items-center gap-2 bg-white text-primary hover:bg-light font-semibold px-8 py-4 rounded-xl transition shadow-lg">
-        Créer mon compte gratuitement
-      </a>
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">Prêt à commencer ?</h2>
+      <a href="register.html" class="inline-flex bg-white text-primary font-semibold px-8 py-4 rounded-xl">Créer mon compte</a>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="bg-primary text-light py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-4 gap-8 mb-8">
-        <div class="md:col-span-2">
-          <span class="brand-text-footer block mb-4">LOOKFORHOME</span>
-          <p class="text-sm text-light/80 max-w-sm">La plateforme qui simplifie la recherche et la publication de logements.</p>
-        </div>
-        <div>
-          <h4 class="font-semibold text-white mb-4">Liens utiles</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="privacy.html" class="hover:text-white transition">Politique de confidentialité</a></li>
-            <li><a href="login.html" class="hover:text-white transition">Connexion</a></li>
-            <li><a href="register.html" class="hover:text-white transition">Inscription</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold text-white mb-4">Contact</h4>
-          <ul class="space-y-2 text-sm">
-            <li>WhatsApp : +237 6XX XXX XXX</li>
-            <li>Email : support@lookforhome.com</li>
-          </ul>
-        </div>
-      </div>
-      <div class="border-t border-white/15 pt-6 text-center text-sm text-light/60">
-        © 2026 LookForHome. Tous droits réservés. · Joyeuses fêtes 🎄
-      </div>
+      <span class="brand-text-footer block mb-4">LOOKFORHOME</span>
+      <p class="text-sm text-light/70 mb-6">Logements & chauffeurs · Contact sécurisé</p>
+      <div class="border-t border-white/15 pt-6 text-center text-sm text-light/60">© 2026 LookForHome</div>
     </div>
   </footer>
 

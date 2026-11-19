@@ -1,54 +1,25 @@
-// ========================================
-// LookForHome – Schéma Prisma
-// ========================================
-
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// ---------- Utilisateurs ----------
+
 enum Role {
   LANDLORD
   TENANT
+  DRIVER
   ADMIN
 }
 
 enum Gender {
   HOMME
   FEMME
-  AUTRE
 }
 
-model User {
-  id           String   @id @default(cuid())
-  name         String
-  firstName    String?  // utilisé surtout pour Admin
-  email        String   @unique
-  password     String   // hashé avec bcrypt
-  gender       Gender?
-  whatsapp     String
-  role         Role
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // Relations
-  listings     Listing[]          @relation("LandlordListings")   // bailleur
-  submissions  Listing[]          @relation("SubmittedBy")        // soumissions bailleur
-  unlocked     UnlockedListing[]
-  favorites    Favorite[]
-  visits       Visit[]
-  notifications NotificationLog[]
-
-  @@map("users")
-}
-
-// ---------- Types de logement ----------
 enum HousingType {
   CHAMBRE_MODERNE
   CHAMBRE_SIMPLE
@@ -61,112 +32,169 @@ enum HousingType {
 }
 
 enum ListingStatus {
-  PENDING    // soumission bailleur en attente
-  PUBLISHED  // publié par admin
+  PENDING
+  PUBLISHED
   REJECTED
   ARCHIVED
 }
 
-model Listing {
-  id            String        @id @default(cuid())
-  type          HousingType
-  bedrooms      Int?          // 1-10 (studio / appartement)
-  bathrooms     Int?          // 1-5
-  livingRooms   Int?          // 1-5
-  hasWater      Boolean       @default(true)
-  hasElectricity Boolean      @default(true)
-  neighborhood  String
-  description   String        @db.Text
-  visitPrice    Int           @default(2000) // FCFA
-  status        ListingStatus @default(PENDING)
-  images        String[]      // URLs (Cloudinary / S3)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  publishedAt   DateTime?
+enum VehicleType {
+  TAXI
+  VTC
+  MOTO
+  BUS
+  CAMION
+  AUTRE
+}
 
-  // Qui a soumis (bailleur)
-  submittedById String?
-  submittedBy   User?         @relation("SubmittedBy", fields: [submittedById], references: [id])
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  firstName    String?
+  email        String   @unique
+  password     String
+  gender       Gender?
+  whatsapp     String
+  role         Role
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  // Qui a publié (admin) ou propriétaire final
-  landlordId    String?
-  landlord      User?         @relation("LandlordListings", fields: [landlordId], references: [id])
-
-  // Relations
-  unlockedBy    UnlockedListing[]
+  listings      Listing[]           @relation("LandlordListings")
+  submissions   Listing[]           @relation("SubmittedBy")
+  vehicles      Vehicle[]           @relation("DriverVehicles")
+  vehicleSubs   Vehicle[]           @relation("VehicleSubmittedBy")
+  unlocked      UnlockedListing[]
+  unlockedVeh   UnlockedVehicle[]
   favorites     Favorite[]
   visits        Visit[]
+  notifications NotificationLog[]
+
+  @@map("users")
+}
+
+model Listing {
+  id             String        @id @default(cuid())
+  type           HousingType
+  bedrooms       Int?
+  bathrooms      Int?
+  livingRooms    Int?
+  hasWater       Boolean       @default(true)
+  hasElectricity Boolean       @default(true)
+  neighborhood   String
+  description    String        @db.Text
+  visitPrice     Int           @default(2000)
+  status         ListingStatus @default(PENDING)
+  images         String[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  publishedAt    DateTime?
+  rejectReason   String?
+
+  submittedById String?
+  submittedBy   User?   @relation("SubmittedBy", fields: [submittedById], references: [id])
+  landlordId    String?
+  landlord      User?   @relation("LandlordListings", fields: [landlordId], references: [id])
+
+  unlockedBy UnlockedListing[]
+  favorites  Favorite[]
+  visits     Visit[]
 
   @@map("listings")
 }
 
-// ---------- Déblocages (visite payée) ----------
+model Vehicle {
+  id           String        @id @default(cuid())
+  type         VehicleType
+  brand        String?
+  model        String?
+  plate        String?
+  city         String
+  description  String        @db.Text
+  contactPrice Int           @default(1000)
+  status       ListingStatus @default(PENDING)
+  images       String[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  publishedAt  DateTime?
+  rejectReason String?
+
+  submittedById String?
+  submittedBy   User?  @relation("VehicleSubmittedBy", fields: [submittedById], references: [id])
+  driverId      String?
+  driver        User?  @relation("DriverVehicles", fields: [driverId], references: [id])
+
+  unlockedBy UnlockedVehicle[]
+
+  @@map("vehicles")
+}
+
 model UnlockedListing {
   id         String   @id @default(cuid())
   userId     String
   listingId  String
   unlockedAt DateTime @default(now())
-
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, listingId]) // un utilisateur ne paie qu'une fois
+  @@unique([userId, listingId])
   @@map("unlocked_listings")
 }
 
-// ---------- Favoris ----------
+model UnlockedVehicle {
+  id         String   @id @default(cuid())
+  userId     String
+  vehicleId  String
+  unlockedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  @@unique([userId, vehicleId])
+  @@map("unlocked_vehicles")
+}
+
 model Favorite {
   id        String   @id @default(cuid())
   userId    String
   listingId String
   createdAt DateTime @default(now())
-
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
   @@unique([userId, listingId])
   @@map("favorites")
 }
 
-// ---------- Historique des visites (paiements) ----------
 model Visit {
   id            String   @id @default(cuid())
   userId        String
   listingId     String
-  amount        Int      // FCFA
-  paymentMethod String?  // MTN_MOMO | ORANGE_MONEY | CARD
-  transactionId String?  // ID retourné par Campay / CamerPay
-  status        String   @default("SUCCESS") // SUCCESS | FAILED | PENDING
+  amount        Int
+  paymentMethod String?
+  transactionId String?
+  status        String   @default("SUCCESS")
   createdAt     DateTime @default(now())
-
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing       Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
   @@map("visits")
 }
 
-// ---------- Logs de notifications ----------
 model NotificationLog {
   id        String   @id @default(cuid())
   userId    String?
-  channel   String   // SMS | WHATSAPP
+  channel   String
   message   String   @db.Text
-  status    String   @default("SENT") // SENT | FAILED
+  status    String   @default("SENT")
   createdAt DateTime @default(now())
-
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-
   @@map("notification_logs")
 }
 
-// ---------- Paramètres globaux (singleton) ----------
 model Setting {
-  id               Int     @id @default(1)
-  defaultVisitPrice Int    @default(2000)
-  supportWhatsapp  String  @default("+2376XXXXXXXX")
-  supportSms       String  @default("+2376XXXXXXXX")
-  adminCode        String  @default("LFH-ADMIN-2026")
-  updatedAt        DateTime @updatedAt
-
+  id                 Int      @id @default(1)
+  defaultVisitPrice  Int      @default(2000)
+  defaultContactPrice Int     @default(1000)
+  contactFree        Boolean  @default(false)
+  supportWhatsapp    String   @default("+2376XXXXXXXX")
+  supportSms         String   @default("+2376XXXXXXXX")
+  adminCode          String   @default("LFH-ADMIN-2026")
+  updatedAt          DateTime @updatedAt
   @@map("settings")
 }

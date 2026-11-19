@@ -1,296 +1,122 @@
-/* ========================================
-   LookForHome – Noël 2026 + design vif
-   ======================================== */
+body { font-family: 'Inter', system-ui, sans-serif; background: #F0F7FF; }
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: #F0F7FF;
-}
-
-/* ---------- Logo texte ---------- */
 .brand-text {
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  font-size: 1.35rem;
-  line-height: 1;
-  background: linear-gradient(105deg, #0B4F8A 0%, #1E90FF 40%, #C41E3A 70%, #0B4F8A 100%);
+  font-weight: 800; letter-spacing: 0.06em; font-size: 1.35rem; line-height: 1;
+  background: linear-gradient(105deg, #0B4F8A 0%, #1E90FF 45%, #C41E3A 75%, #0B4F8A 100%);
   background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   animation: gradientShift 6s linear infinite;
 }
-
-@media (min-width: 768px) {
-  .brand-text { font-size: 1.65rem; }
-}
-
-.brand-text-footer {
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  font-size: 1.5rem;
-  color: #fff;
-}
-
+@media (min-width: 768px) { .brand-text { font-size: 1.7rem; } }
+.brand-text-footer { font-weight: 800; letter-spacing: 0.06em; font-size: 1.5rem; color: #fff; }
 .brand-text-modal {
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  font-size: 1.75rem;
+  font-weight: 800; letter-spacing: 0.05em; font-size: 1.75rem;
   background: linear-gradient(105deg, #0B4F8A, #1E90FF, #C41E3A);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-/* ---------- Hero ---------- */
 @keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-@keyframes floatSoft {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+
+.hero-photo {
+  position: relative;
+  min-height: 70vh;
+  display: flex; align-items: center;
+  overflow: hidden;
 }
-@keyframes sparkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
+.hero-photo::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.55);
+  transform: scale(1.05);
+  z-index: 0;
 }
-@keyframes snowfall {
-  0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(110vh) translateX(40px); opacity: 0; }
+.hero-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(11,61,110,0.75), rgba(196,30,58,0.35), rgba(30,144,255,0.4));
+  z-index: 1;
+}
+.hero-photo .hero-inner { position: relative; z-index: 2; }
+
+.hero-title-line { opacity: 0; animation: heroFadeUp 0.8s ease forwards; }
+.hero-title-line:nth-child(1) { animation-delay: 0.12s; }
+.hero-title-line:nth-child(2) { animation-delay: 0.3s; }
+.hero-subtitle { opacity: 0; animation: heroFadeUp 0.8s ease 0.5s forwards; }
+.hero-cta { opacity: 0; animation: heroFadeUp 0.8s ease 0.7s forwards; }
+.hero-highlight {
+  background: linear-gradient(90deg, #FFE082, #fff, #FF8A80, #FFE082);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: gradientShift 3.5s linear infinite;
+}
+.brand-hero {
+  font-weight: 900; letter-spacing: 0.12em; font-size: clamp(2.2rem, 8vw, 4.5rem);
+  color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,0.45);
+  opacity: 0; animation: heroFadeUp 0.9s ease 0.05s forwards;
+}
+
+.step-card {
+  position: relative; background: #fff; border-radius: 1.25rem; padding: 2rem 1.5rem;
+  text-align: center; border: 1px solid rgba(30,144,255,0.15);
+  box-shadow: 0 8px 28px rgba(11,61,110,0.08); overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.step-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.65) 50%, transparent 60%);
+  background-size: 200% 100%; animation: cardShine 4s ease-in-out infinite; pointer-events: none;
 }
 @keyframes cardShine {
   0% { background-position: -120% 0; }
   100% { background-position: 220% 0; }
 }
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0.35); }
-  50% { box-shadow: 0 0 0 12px rgba(30, 144, 255, 0); }
-}
-
-.hero-animated {
-  background: linear-gradient(-45deg, #0B3D6E, #1565C0, #1E90FF, #C41E3A, #0B3D6E);
-  background-size: 320% 320%;
-  animation: gradientShift 12s ease infinite;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-title-line {
-  opacity: 0;
-  animation: heroFadeUp 0.8s ease forwards;
-}
-.hero-title-line:nth-child(1) { animation-delay: 0.12s; }
-.hero-title-line:nth-child(2) { animation-delay: 0.32s; }
-
-.hero-subtitle {
-  opacity: 0;
-  animation: heroFadeUp 0.8s ease 0.5s forwards;
-}
-.hero-cta {
-  opacity: 0;
-  animation: heroFadeUp 0.8s ease 0.7s forwards;
-}
-
-.hero-highlight {
-  background: linear-gradient(90deg, #FFE082, #FFFFFF, #FF8A80, #FFE082);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 3.5s linear infinite;
-}
-
-.hero-orb {
-  animation: floatSoft 7s ease-in-out infinite;
-}
-
-/* Flocons */
-.snowflake {
-  position: absolute;
-  top: -10px;
-  color: rgba(255,255,255,0.75);
-  font-size: 0.9rem;
-  pointer-events: none;
-  animation: snowfall linear infinite;
-  z-index: 1;
-}
-
-/* Bandeau Noël */
-.xmas-banner {
-  background: linear-gradient(90deg, #C41E3A, #1E90FF, #0B8A4A, #C41E3A);
-  background-size: 200% auto;
-  animation: gradientShift 8s linear infinite;
-  color: #fff;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 0.45rem 1rem;
-}
-
-/* ---------- Comment ça marche – cartes brillantes ---------- */
-.step-card {
-  position: relative;
-  background: #fff;
-  border-radius: 1.25rem;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  border: 1px solid rgba(30, 144, 255, 0.15);
-  box-shadow: 0 8px 28px rgba(11, 61, 110, 0.08);
-  overflow: hidden;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-
-.step-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,0.65) 50%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  animation: cardShine 4s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.step-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 40px rgba(11, 61, 110, 0.14);
-}
-
+.step-card:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(11,61,110,0.14); }
 .step-num {
-  width: 3.5rem;
-  height: 3.5rem;
-  margin: 0 auto 1.25rem;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #fff;
+  width: 3.5rem; height: 3.5rem; margin: 0 auto 1.25rem; border-radius: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; font-weight: 800; color: #fff;
   background: linear-gradient(135deg, #1E90FF, #0B4F8A);
-  animation: pulseGlow 2.8s ease-in-out infinite;
 }
 
-.step-card:nth-child(2) .step-num {
-  background: linear-gradient(135deg, #0B8A4A, #1E90FF);
-  animation-delay: 0.4s;
-}
-.step-card:nth-child(3) .step-num {
-  background: linear-gradient(135deg, #C41E3A, #1E90FF);
-  animation-delay: 0.8s;
-}
-
-/* ---------- Carrousel ---------- */
-.listings-carousel {
-  position: relative;
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
-}
-
+.listings-carousel { position: relative; overflow: hidden; }
 .listings-track {
-  display: flex;
-  gap: 1.25rem;
-  width: max-content;
-  animation: carouselScroll 42s linear infinite;
-  padding: 0.5rem 0 1rem;
+  display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 0.5rem 0 1rem; -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
-
-.listings-carousel:hover .listings-track {
-  animation-play-state: paused;
-}
-
-@keyframes carouselScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
+.listings-track::-webkit-scrollbar { height: 6px; }
+.listings-track::-webkit-scrollbar-thumb { background: #1E90FF; border-radius: 3px; }
 .carousel-card {
-  flex: 0 0 auto;
-  width: min(300px, 78vw);
-  background: #fff;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  border: 1px solid rgba(30, 144, 255, 0.18);
-  box-shadow: 0 6px 24px rgba(11, 61, 110, 0.08);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  flex: 0 0 auto; width: min(300px, 78vw); scroll-snap-align: start;
+  background: #fff; border-radius: 1.25rem; overflow: hidden;
+  border: 1px solid rgba(30,144,255,0.18);
+  box-shadow: 0 6px 24px rgba(11,61,110,0.08);
+  transition: transform 0.3s ease;
 }
-
-.carousel-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(11, 61, 110, 0.16);
-}
-
-.carousel-card img {
-  transition: transform 0.5s ease;
-}
-.carousel-card:hover img {
-  transform: scale(1.06);
-}
-
+.carousel-card:hover { transform: translateY(-4px); }
 .carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 9999px;
-  background: #fff;
-  border: 1px solid rgba(30, 144, 255, 0.25);
-  box-shadow: 0 4px 14px rgba(11, 61, 110, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0B3D6E;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+  width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: #fff;
+  border: 1px solid rgba(30,144,255,0.25); box-shadow: 0 4px 14px rgba(11,61,110,0.12);
+  display: flex; align-items: center; justify-content: center; color: #0B3D6E; cursor: pointer;
 }
-.carousel-btn:hover {
-  background: #1E90FF;
-  color: #fff;
-}
+.carousel-btn:hover { background: #1E90FF; color: #fff; }
 .carousel-btn.prev { left: 0.25rem; }
 .carousel-btn.next { right: 0.25rem; }
+@media (max-width: 640px) { .carousel-btn { width: 2.25rem; height: 2.25rem; } }
 
-@media (max-width: 640px) {
-  .carousel-btn { display: none; }
-  .listings-carousel {
-    mask-image: none;
-    -webkit-mask-image: none;
-  }
-}
-
-.blurred-img, .blurred {
-  filter: blur(12px);
-  transition: filter 0.4s ease;
-}
-.unlocked .blurred-img, .unlocked .blurred { filter: blur(0); }
-
+.blurred-img { filter: blur(12px); }
 .line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.modal-enter {
-  animation: fadeIn 0.25s ease-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.97); }
-  to   { opacity: 1; transform: scale(1); }
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }

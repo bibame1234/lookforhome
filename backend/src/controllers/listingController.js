@@ -1,4 +1,5 @@
 const prisma = require('../utils/prisma');
+const notifications = require('../services/notifications');
 
 // Mapping des types pour l'API
 const TYPE_LABELS = {
@@ -293,9 +294,31 @@ async function approveListing(req, res) {
         publishedAt: new Date(),
         visitPrice: req.body.visitPrice || undefined,
       },
+      include: {
+        submittedBy: { select: { id: true, name: true, whatsapp: true } },
+      },
     });
+
+    // Notifier le bailleur
+    try {
+      const phone = listing.submittedBy?.whatsapp;
+      if (phone) {
+        const msg = `LookForHome: votre logement à ${listing.neighborhood} a été approuvé et publié. Merci !`;
+        if (notifications.isConfigured()) {
+          await notifications.send(phone, msg, 'WHATSAPP').catch(() =>
+            notifications.send(phone, msg, 'SMS')
+          );
+        } else {
+          console.log('[Simul notif] Approbation →', phone);
+        }
+      }
+    } catch (e) {
+      console.error('Notif approbation:', e.message);
+    }
+
     res.json({ message: 'Logement approuvé et publié', listing });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Erreur serveur' });
   }
 }
@@ -305,11 +328,21 @@ async function approveListing(req, res) {
  */
 async function rejectListing(req, res) {
   try {
+    const reason = req.body.reason || 'Non conforme';
     const listing = await prisma.listing.update({
       where: { id: req.params.id },
-      data: { status: 'REJECTED' },
+      data: { status: 'REJECTED', rejectReason: reason },
+      include: { submittedBy: { select: { whatsapp: true, name: true } } },
     });
-    res.json({ message: 'Soumission rejetée', listing });
+    try {
+      const phone = listing.submittedBy?.whatsapp;
+      if (phone) {
+        const msg = `LookForHome: votre logement à ${listing.neighborhood} a été refusé. Motif: ${reason}`;
+        if (notifications.isConfigured()) await notifications.send(phone, msg, 'WHATSAPP');
+        else console.log('[Notif refus]', phone, msg);
+      }
+    } catch (e) { console.error(e.message); }
+    res.json({ message: 'Logement refusé', listing });
   } catch (err) {
     res.status(500).json({ error: 'Erreur serveur' });
   }

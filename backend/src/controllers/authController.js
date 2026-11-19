@@ -15,7 +15,7 @@ async function register(req, res) {
       return res.status(400).json({ error: 'Champs obligatoires manquants' });
     }
 
-    const allowedRoles = ['LANDLORD', 'TENANT', 'ADMIN'];
+    const allowedRoles = ['LANDLORD', 'TENANT', 'DRIVER'];
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({ error: 'Rôle invalide' });
     }

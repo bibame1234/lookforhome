@@ -9,6 +9,7 @@ const visitCtrl = require('../controllers/visitController');
 const userCtrl = require('../controllers/userController');
 const favCtrl = require('../controllers/favoriteController');
 const settingsCtrl = require('../controllers/settingsController');
+const vehicleCtrl = require('../controllers/vehicleController');
 const uploadCtrl = require('../controllers/uploadController');
 const upload = require('../middleware/upload');
 
@@ -34,7 +35,11 @@ router.delete('/listings/:id', authenticate, requireRole('LANDLORD'), listingCtr
 router.get('/listings', optionalAuth, listingCtrl.getPublishedListings); // public + optionnel auth
 router.get('/listings/:id', optionalAuth, listingCtrl.getListingById);
 
-// ========== VISITES / DÉBLOCAGE ==========
+// ========== VISITES / PAIEMENT ==========
+router.post('/visits/initiate', authenticate, requireRole('TENANT'), visitCtrl.initiatePayment);
+router.get('/visits/status/:transactionId', authenticate, requireRole('TENANT'), visitCtrl.checkPaymentStatus);
+router.post('/visits/confirm-simulation', authenticate, requireRole('TENANT'), visitCtrl.confirmSimulation);
+router.post('/visits/webhook', visitCtrl.campayWebhook); // public – Campay callback
 router.post('/visits/unlock', authenticate, requireRole('TENANT'), visitCtrl.unlockListing);
 router.get('/visits/my-unlocks', authenticate, requireRole('TENANT'), visitCtrl.myUnlocks);
 
@@ -62,5 +67,14 @@ router.delete('/admin/visits', authenticate, requireRole('ADMIN'), visitCtrl.adm
 router.get('/admin/settings', authenticate, requireRole('ADMIN'), settingsCtrl.getAdminSettings);
 router.put('/admin/settings', authenticate, requireRole('ADMIN'), settingsCtrl.updateSettings);
 router.post('/admin/notifications', authenticate, requireRole('ADMIN'), settingsCtrl.sendNotifications);
+
+
+// Vehicles (chauffeurs)
+router.post('/vehicles/submit', authenticate, requireRole('DRIVER'), vehicleCtrl.submit);
+router.get('/vehicles/my/submissions', authenticate, requireRole('DRIVER'), vehicleCtrl.mySubmissions);
+router.get('/vehicles', optionalAuth, vehicleCtrl.published);
+router.get('/admin/vehicles', authenticate, requireRole('ADMIN'), vehicleCtrl.adminList);
+router.patch('/admin/vehicles/:id/approve', authenticate, requireRole('ADMIN'), vehicleCtrl.approve);
+router.patch('/admin/vehicles/:id/reject', authenticate, requireRole('ADMIN'), vehicleCtrl.reject);
 
 module.exports = router;

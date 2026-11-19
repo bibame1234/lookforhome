@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace chauffeur – LookForHome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{primary:'#0B3D6E',secondary:'#1565C0',accent:'#1E90FF',light:'#B3E0FF',bg:'#F0F7FF'}}}}</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-bg min-h-screen">
+  <header class="bg-white border-b">
+    <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html"><span class="brand-text">LOOKFORHOME</span></a>
+      <button id="logoutBtn" class="text-sm text-secondary hover:text-accent">Déconnexion</button>
+    </div>
+  </header>
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-primary mb-2">Espace chauffeur</h1>
+    <p class="text-secondary text-sm mb-8">Soumettez votre véhicule. Après validation admin, les utilisateurs pourront vous contacter.</p>
+
+    <form id="vehicleForm" class="bg-white rounded-2xl border p-6 space-y-4 mb-10">
+      <h2 class="font-semibold text-primary">Nouveau véhicule</h2>
+      <div>
+        <label class="text-sm font-medium">Type</label>
+        <select name="type" class="w-full border rounded-xl px-3 py-2 mt-1">
+          <option value="TAXI">Taxi</option>
+          <option value="VTC">VTC</option>
+          <option value="MOTO">Moto</option>
+          <option value="BUS">Bus</option>
+          <option value="CAMION">Camion</option>
+          <option value="AUTRE">Autre</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-sm">Marque</label><input name="brand" class="w-full border rounded-xl px-3 py-2 mt-1"></div>
+        <div><label class="text-sm">Modèle</label><input name="model" class="w-full border rounded-xl px-3 py-2 mt-1"></div>
+      </div>
+      <div><label class="text-sm">Immatriculation</label><input name="plate" class="w-full border rounded-xl px-3 py-2 mt-1"></div>
+      <div><label class="text-sm">Ville / quartier</label><input name="city" required class="w-full border rounded-xl px-3 py-2 mt-1"></div>
+      <div><label class="text-sm">Description (max 250 mots)</label><textarea name="description" required rows="3" class="w-full border rounded-xl px-3 py-2 mt-1"></textarea></div>
+      <div>
+        <label class="text-sm">Photos (max 10)</label>
+        <input type="file" id="vehicleImages" accept="image/*" multiple class="w-full mt-1 text-sm">
+      </div>
+      <p id="vehMsg" class="text-sm hidden"></p>
+      <button type="submit" class="w-full py-3 bg-accent text-white rounded-xl font-semibold">Soumettre</button>
+    </form>
+
+    <h2 class="font-semibold text-primary mb-4">Mes soumissions</h2>
+    <div id="myVehicles" class="space-y-3 text-sm text-secondary">Chargement…</div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/driver.js"></script>
+</body>
+</html>
